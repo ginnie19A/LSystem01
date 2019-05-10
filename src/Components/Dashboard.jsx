@@ -9,8 +9,8 @@ class Dashboard extends Component {
 
       <div>
          <div className ="majorBody">
-         <div className="wrapper1">
-         <h1>Welcome Admin!</h1>
+         <div className="wrapper">
+         <h1>Welcome to Loyalty Reward System</h1>
          
        
           

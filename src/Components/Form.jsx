@@ -65,6 +65,7 @@ class Form extends Component {
           };
           editCustomerDetails();
           alert('You successully input Transaction details');
+          window.location.reload();
           
          
       })

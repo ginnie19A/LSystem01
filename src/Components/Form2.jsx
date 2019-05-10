@@ -72,6 +72,7 @@ class Form2 extends Component {
           };
           editCustomerDetails();
           alert('Successully added Transaction!');
+          window.location.reload();
           
          
       })

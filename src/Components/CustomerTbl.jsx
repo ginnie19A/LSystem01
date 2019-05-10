@@ -8,6 +8,7 @@ class CustomerTbl extends Component {
     super(props);
     this.state = {
       customer: [],
+      transactionList: [],
       editCustomerData: {
         custid: '',
         fname: '',
@@ -18,6 +19,21 @@ class CustomerTbl extends Component {
         expdate: '',
         totalbal: ''
       },
+      editCustomerData1: {
+        custid: '',
+        fname: '',
+        mname: '',
+        lname: '',
+        gender: '',
+        birthdate: '',
+        expdate: '',
+        totalbal: ''
+      },
+
+      fname:'',
+      mname:'',
+      lname:'',
+      
       viewCustomerData: {
         custid: '',
         fname: '',
@@ -29,7 +45,11 @@ class CustomerTbl extends Component {
         totalbal: ''
       },
       editCustomerData: false,
-      viewCustomerData: false
+      editCustomerData1: false,
+      viewCustomerData: false,
+
+      editCustomerModal: false,
+      editCustomerModal1: false
   };
   this.handleSubmit = this.handleSubmit.bind(this);
   this.handleChangeFNAME = this.handleChangeFNAME.bind(this);
@@ -53,7 +73,12 @@ class CustomerTbl extends Component {
       viewCustomerModal: !this.state.viewCustomerModal
     });
   }
-
+  toggleEditCustomerModal1() {
+    this.setState({
+      editCustomerModal1: !this.state.editCustomerModal1
+    });
+  }
+  
   updateCustomer() {
     let { custid, fname, mname, lname, gender, birthdate, expdate, totalbal } = this.state.editCustomerData;
 
@@ -75,12 +100,30 @@ class CustomerTbl extends Component {
     });
     
   }
+  editCustomer1(custid, fname, mname, lname, gender, birthdate, expdate, totalbal) {
+    this.setState({
+      editCustomerData1: { custid, fname, mname, lname, gender, birthdate, expdate, totalbal  }, editCustomerModal1: !this.state.editCustomerModal1
+    });
+    console.log(this.state.editCustomerData1.custid)
+    let editBookDetails = () => {
+      axios.get('http://localhost:8080/LSystem01/rest/Transaction?CUSTID=' + custid).then(res =>{
+    console.log(this.state.editCustomerData1.custid)
+ console.log(res);
+ console.log("didmount");
+  this.setState({transactionList:res.data});});
+    
+    };
+    editBookDetails();
+
+    
+  }
   
   viewCustomer(custid, fname, mname, lname, gender, birthdate, expdate, totalbal) {
     this.setState({
       viewCustomerData: { custid, fname, mname, lname, gender, birthdate, expdate, totalbal }, viewCustomerModal: !this.state.viewCustomerModal
     });
   }
+
   _refreshCustomer() {
     axios.get('http://localhost:8080/LSystem01/rest/Customer/').then((response) => {
       this.setState({
@@ -137,6 +180,23 @@ class CustomerTbl extends Component {
         });
       
     }
+
+    else if (this.state.mname =="" && this.state.fname =="" && this.state.lname ==""){
+  
+      let getLNAMEURL ='http://localhost:8080/LSystem01/rest/Customer';
+      console.log(getLNAMEURL);
+      axios.get(getLNAMEURL).then(res =>
+        {
+          this.setState({customer:[]});
+          //var BlankArray = this.state.books;
+          //this.state.books.push(res.data)
+          this.setState({customer:res.data})
+          
+          console.log(res);
+          console.log(res.data)
+        });
+      
+    }
   }
   handleChangeFNAME(event) {
     this.setState({fname: event.target.value});
@@ -150,6 +210,26 @@ class CustomerTbl extends Component {
     this.setState({lname: event.target.value});
   }
   render() {
+
+    let customer=this.state.transactionList.map(transaction =>{
+      
+      return(
+        
+          <tr>
+        <td>{transaction.transid}</td>
+        <td>{transaction.transdesc}</td>
+        <td>{transaction.pointsamt}</td>
+        <td>{transaction.transdate}</td>
+        <td>{transaction.custid}</td>
+      
+        
+      
+        
+      
+        </tr>
+        
+      )
+    });
   
     return (
 
@@ -330,6 +410,33 @@ class CustomerTbl extends Component {
             </ModalFooter>
           </Modal>
 
+          <Modal isOpen={this.state.editCustomerModal1} toggle={this.toggleEditCustomerModal1.bind(this)} className="Modal">
+            <ModalHeader className="Modal" toggle={this.toggleEditCustomerModal1.bind(this)}>View Transaction History</ModalHeader>
+            <ModalBody className="Modal">
+            <table className='container1 wrapper1'>
+                
+                <thead> 
+                <tr>
+                        <th><h1>ID </h1></th>
+                        <th><h1>TRANSACTION </h1></th>
+                        <th><h1>POINTS AMT </h1> </th>
+                        <th><h1>TRANSACTION DATE </h1></th>
+                        <th><h1>CUST ID </h1></th>
+                        
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                  {customer}
+                </tbody>
+                
+                </table>
+
+            </ModalBody>
+            <ModalFooter>
+            </ModalFooter>
+          </Modal>
+
 
           <Fragment>
             <table className='container1'>
@@ -364,6 +471,7 @@ class CustomerTbl extends Component {
                         <td>
                         <Button color="success" size="sm" className="fa fa-align-justify" onClick={this.viewCustomer.bind(this, customer.custid, customer.fname, customer.mname, customer.lname, customer.gender, customer.birthdate, customer.expdate, customer.totalbal)}></Button>
                         <Button color="success" size="sm" className="fa fa-edit" onClick={this.editCustomer.bind(this, customer.custid, customer.fname, customer.mname, customer.lname, customer.gender, customer.birthdate, customer.expdate, customer.totalbal)}></Button>
+                        <Button color="success" size="sm" className="fa fa-book" onClick={this.editCustomer1.bind(this, customer.custid, customer.fname, customer.mname, customer.lname, customer.gender, customer.birthdate, customer.expdate, customer.totalbal)}></Button>
                        </td>
                         
                     </tr>

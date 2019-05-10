@@ -8,6 +8,11 @@ class TransactionTbl extends Component {
         this.state = {
             
           transactionList: [],
+
+
+          transdesc:'',
+
+          custid:'',
         
           transaction: {
             transid: '',
@@ -20,6 +25,7 @@ class TransactionTbl extends Component {
       };
       this.handleSubmit = this.handleSubmit.bind(this);
       this.handleChangeTRANSDESC = this.handleChangeTRANSDESC.bind(this);
+      this.handleChangeCUSTID = this.handleChangeCUSTID.bind(this);
     }
     
     componentWillMount() {
@@ -27,6 +33,9 @@ class TransactionTbl extends Component {
       }
     handleChangeTRANSDESC(event) {
         this.setState({transdesc: event.target.value});
+      }
+      handleChangeCUSTID(event){
+        this.setState({custid: event.target.value});
       }
       _refreshTransaction() {
         axios.get('http://localhost:8080/LSystem01/rest/Transaction' ).then((response) => {
@@ -51,6 +60,38 @@ class TransactionTbl extends Component {
               console.log(res.data)
             });
           }
+          else if (this.state.custid !=""){
+  
+            let getCUSTIDURL ='http://localhost:8080/LSystem01/rest/Transaction?CUSTID='+this.state.custid;
+            console.log(getCUSTIDURL);
+            axios.get(getCUSTIDURL).then(res =>
+              {
+                this.setState({transactionList:[]});
+                //var BlankArray = this.state.books;
+                //this.state.books.push(res.data)
+                this.setState({transactionList:res.data})
+                
+                console.log(res);
+                console.log(res.data)
+              });
+        
+          }
+          else if (this.state.transdesc =="" && this.state.custid ==""){
+  
+            let getLNAMEURL ='http://localhost:8080/LSystem01/rest/Transaction';
+            console.log(getLNAMEURL);
+            axios.get(getLNAMEURL).then(res =>
+              {
+                this.setState({transactionList:[]});
+                //var BlankArray = this.state.books;
+                //this.state.books.push(res.data)
+                this.setState({transactionList:res.data})
+                
+                console.log(res);
+                console.log(res.data)
+              });
+          }
+            
         }
       
     render() {
@@ -70,7 +111,7 @@ class TransactionTbl extends Component {
                  </div>
                     <div className="search">
                     <input type="text" name="transdesc" className="searchbar" onKeyUp={this.handleSubmit}onChange={this.handleChangeTRANSDESC} placeholder="Search by Transaction..."></input>
-                    
+                    <input type="text" name="custid" className="searchbar1" onKeyUp={this.handleSubmit}onChange={this.handleChangeCUSTID} placeholder="Search by Customer ID..."></input>
                      
                    
                     

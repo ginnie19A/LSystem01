@@ -47,6 +47,7 @@ class Form1 extends Component {
         });
         e.preventDefault();
         alert('Successully added Member!');
+        window.location.reload();
       }
       
       

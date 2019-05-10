@@ -43,6 +43,10 @@ Label {
 .wrapper {
   padding-left: 5%;
 }
+.wrapper1 {
+  align-self: center;
+  margin-right: 15%;
+}
 
 h1 {
   font-size:3em; 
@@ -149,3 +153,7 @@ li {
   background-color: RoyalBlue;
 }
 
+.Modal{
+  width: 500px;
+  height: auto;
+}

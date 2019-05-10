@@ -67,7 +67,7 @@ class TransactionInput extends Component {
                    <option value="Select Transaction" >Select Transaction</option>
                      <option value="Membership Activation" >Membership Activation</option>
                      <option value="Add Points" >Add Points</option>
-                     <option value="Spend Points" >Spend Points</option>
+                    
                      
                    </select>
 
